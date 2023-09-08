@@ -37,8 +37,8 @@ function App() {
 
     return (
         <Wrapper onClick={toggleClicked}>
-            <Box>{!clicked ? <Circle layoutId="circle" /> : null}</Box>
-            <Box>{clicked ? <Circle layoutId="circle" /> : null}</Box>
+            <Box>{!clicked ? <Circle layoutId="circle" style={{ borderRadius: 50 }} /> : null}</Box>
+            <Box>{clicked ? <Circle layoutId="circle" style={{ borderRadius: 0, scale: 2 }} /> : null}</Box>
         </Wrapper>
     );
 }
