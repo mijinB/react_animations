@@ -102,7 +102,6 @@ function App() {
                                 variants={boxVariants}
                                 custom={isLeftHover}
                                 whileHover="hover"
-                                transition={{ duration: 0.1 }}
                                 onMouseEnter={() => (i === "1" ? setIsLeftHover(true) : setIsLeftHover(false))}
                                 onClick={() => setId(i)}
                             />
@@ -119,7 +118,7 @@ function App() {
                         )
                     )}
                 </Grid>
-                {id ? (
+                {id && (
                     <Overlay
                         key="overlay"
                         initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
@@ -129,7 +128,7 @@ function App() {
                     >
                         <Box layoutId={id} style={{ backgroundColor: "rgba(255, 255, 255, 1)" }} />
                     </Overlay>
-                ) : null}
+                )}
                 {isRightCircle ? (
                     <Switch onClick={toggleSwitch}>Switch</Switch>
                 ) : (
