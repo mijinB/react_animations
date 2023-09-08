@@ -92,7 +92,7 @@ function App() {
 
     return (
         <Wrapper>
-            <AnimatePresence>
+            <AnimatePresence custom={isLeftHover}>
                 <Grid key="grid">
                     {["1", "2", "3", "4"].map((i) =>
                         i === "1" || i === "4" ? (
