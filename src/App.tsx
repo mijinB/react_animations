@@ -26,12 +26,14 @@ const Box = styled(motion.div)`
 `;
 
 const box = {
-    invisible: {
-        x: 500,
-        opacity: 0,
-        scale: 0,
+    entry: (isBack: boolean) => {
+        return {
+            x: isBack ? -500 : 500,
+            opacity: 0,
+            scale: 0,
+        };
     },
-    visible: {
+    center: {
         x: 0,
         opacity: 1,
         scale: 1,
@@ -39,38 +41,49 @@ const box = {
             duration: 1,
         },
     },
-    exit: {
-        x: -500,
-        opacity: 0,
-        scale: 0,
-        transition: {
-            duration: 1,
-        },
+    exit: (isBack: boolean) => {
+        return {
+            x: isBack ? 500 : -500,
+            opacity: 0,
+            scale: 0,
+            transition: {
+                duration: 1,
+            },
+        };
     },
 };
 
 function App() {
     const [visible, setVisible] = useState(1);
+    const [isBack, setIsBack] = useState(false);
 
     /**@function nextPlease
-     * 1. 값이 10이면 10을 반환하고 10이 아니면 +1한 값을 반환
+     * 1. isBack을 false로 변경
+     * 2. 값이 10이면 10을 반환하고 10이 아니면 +1한 값을 반환
      */
     const nextPlease = () => {
+        setIsBack(false);
+        setVisible((prev) => (prev === 10 ? 10 : prev + 1));
+    };
+
+    /**@function nextPlease
+     * 1. isBack을 true로 변경
+     * 2. 값이 1이면 1을 반환하고 1이 아니면 -1한 값을 반환
+     */
+    const prevPlease = () => {
+        setIsBack(true);
         setVisible((prev) => (prev === 10 ? 10 : prev + 1));
     };
 
     return (
         <Wrapper>
-            <AnimatePresence>
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) =>
-                    i === visible ? (
-                        <Box key={i} variants={box} initial="invisible" animate="visible" exit="exit">
-                            {i}
-                        </Box>
-                    ) : null
-                )}
+            <AnimatePresence mode="wait" custom={isBack}>
+                <Box key={visible} variants={box} initial="entry" animate="center" exit="exit" custom={isBack}>
+                    {visible}
+                </Box>
             </AnimatePresence>
             <button onClick={nextPlease}>next</button>
+            <button onClick={prevPlease}>next</button>
         </Wrapper>
     );
 }
