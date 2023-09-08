@@ -4,6 +4,7 @@ import { useState } from "react";
 
 const Wrapper = styled.div`
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
     align-items: center;
     width: 100vw;
@@ -38,43 +39,63 @@ const Box = styled(motion.div)`
 `;
 
 const Circle = styled(motion.div)`
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
 const boxVariants = {
-    hover: (isLeft: boolean) => {
+    hover: (isLeftHover: boolean) => {
         return {
             scale: 1.1,
-            x: isLeft ? -15 : 15,
-            y: isLeft ? -10 : 10,
+            x: isLeftHover ? -15 : 15,
+            y: isLeftHover ? -10 : 10,
         };
     },
 };
 
 function App() {
-    const [isLeft, setIsLeft] = useState(true);
+    const [isLeftHover, setIsLeftHover] = useState(true);
+    const [isRightCircle, setIsRightCircle] = useState(true);
     const [id, setId] = useState<null | string>(null);
+
+    /**@function toggleSwitch
+     * 1. isRightCircle의 bool 값을 변경(true ↔ false)
+     */
+    const toggleSwitch = () => {
+        setIsRightCircle((prev) => !prev);
+    };
 
     return (
         <Wrapper>
-            <AnimatePresence custom={isLeft}>
-                <Grid>
+            <AnimatePresence custom={isLeftHover}>
+                <Grid key="grid">
                     {[1, 2, 3, 4].map((i) =>
                         i === 1 || i === 4 ? (
                             <Box
                                 key={i}
                                 variants={boxVariants}
-                                custom={isLeft}
+                                custom={isLeftHover}
                                 whileHover="hover"
                                 transition={{ duration: 0.1 }}
-                                onMouseEnter={() => (i === 1 ? setIsLeft(true) : setIsLeft(false))}
+                                onMouseEnter={() => (i === 1 ? setIsLeftHover(true) : setIsLeftHover(false))}
                             />
                         ) : (
-                            <Box key={i} />
+                            <Box key={i}>
+                                {i === 2 ? (
+                                    isRightCircle ? (
+                                        <Circle layoutId="circle" />
+                                    ) : null
+                                ) : !isRightCircle ? (
+                                    <Circle layoutId="circle" />
+                                ) : null}
+                            </Box>
                         )
                     )}
                 </Grid>
+                <button onClick={toggleSwitch}>Switch</button>
             </AnimatePresence>
         </Wrapper>
     );
